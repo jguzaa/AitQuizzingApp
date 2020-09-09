@@ -3,7 +3,10 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-const cookieSession = require('cookie-session');
+const dotenv = require('dotenv')
+
+//load config
+dotenv.config({path: './config/config.env'})
 
 
 //Import classes
