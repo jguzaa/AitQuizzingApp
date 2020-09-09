@@ -4,7 +4,7 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 const cookieSession = require('cookie-session');
-require('./utils/passport');
+
 
 //Import classes
 const {LiveGames} = require('./utils/liveGames');
@@ -24,25 +24,7 @@ var MongoClient = require('mongodb').MongoClient;
 var mongoose = require('mongoose');
 var url = "mongodb://localhost:27017/";
 
-app.use(passport.initialize());
-app.use(passport.session());
 
-app.use(cookieSession({
-    name: 'userlogin-session',
-    keys: ['key1', 'key2']
-  }))
-
-app.get('/failed', (req, res) => res.send('You failed to login!'))
-
-app.get('/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-app.get('/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/failed' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
 
 app.use(express.static(publicPath));
 
