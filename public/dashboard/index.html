@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Join | KahootClone</title>
+        <link rel = "stylesheet" href = "/css/index.css">
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <nav class="grey darken-3">
+            <div class="nav-wrapper container">
+                <a href="#!" class="brand-logo center">QuizzingApp</a>
+                <h3>Welcome {{name}}</h3>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger show-on-large"><i class="fas fa-bars"></i></a>
+                <ul class="sidenav" id="mobile-demo">
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href='/auth/logout'>Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+        <h1 id = "title">Join a Game</h1>
+        <form action="/player/">
+                <div class="form-field">
+                    <label id = "label">Display Name</label>
+                    <input id = "name" type = "text" name="name" autofocus/>
+                </div>
+                <br>
+                <div class="form-field">
+                    <label id = "label">Game Pin</label>
+                    <input id = "pin" type="number" name="pin"/>
+                </div>
+                <br>
+                <div class="form-field">
+                    <button id = "joinButton">Join</button>
+                </div>
+        
+        </form>
+        <br/>
+        <center><a href = "/create/" id = "host">Click here to host a Kahoot!</a></center>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.14.1/ckeditor.js"
+            integrity="sha256-bEIQpI72w9NJuIVhTLFUF2/8uxl0u5800r8ddViuv+o=" crossorigin="anonymous"></script>
+        <script>
+            M.Sidenav.init(document.querySelector('.sidenav'))
+            M.FormSelect.init(document.querySelector('#status'))
+            CKEDITOR.replace('body', {
+                plugins: 'wysiwygarea, toolbar, basicstyles, link'
+            })
+        </script>
+    </body>
+</html>

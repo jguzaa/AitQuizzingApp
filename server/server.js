@@ -5,16 +5,27 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 const dotenv = require('dotenv')
+const mongoose = require('mongoose');
+require('dotenv').config();
+//passport
+const passport = require('passport')
+const session = require('express-session')
+const  connectDB = require('../config/db')
+const MongoStore = require('connect-mongo')(session)
+// Load config
+dotenv.config({ path: './config/config.env' })
 
-//load config
-dotenv.config({path: './config/config.env'})
+//passport config
+require('../config/passport')(passport)
+
+connectDB()
+
 
 
 //Import classes
 const {LiveGames} = require('./utils/liveGames');
 const {Players} = require('./utils/players');
 
-const publicPath = path.join(__dirname, '../public');
 
 //create new Express applicaiton
 var app = express();
@@ -23,17 +34,34 @@ var io = socketIO(server);
 var games = new LiveGames();
 var players = new Players();
 
+// Session
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection})
+  }))
+
+// Passaport middleware
+app.use(passport.initialize())
+app.use(passport.session())
+
 //Mongodb setup
 var MongoClient = require('mongodb').MongoClient;
-var mongoose = require('mongoose');
+
 var url = "mongodb://localhost:27017/";
 
+const PORT = process.env.PORT || 3000
 
-
+//Routes
+const publicPath = path.join(__dirname, '../public');
 app.use(express.static(publicPath));
+app.use('/auth', require('../routes/auth'))
+app.use('/dashboard', require('../routes/index'))
+
 
 //Starting server on port 3000
-server.listen(3000, () => {
+server.listen( PORT, () => {
     console.log("Server started on port 3000");
 });
 
