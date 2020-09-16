@@ -58,7 +58,8 @@ const publicPath = path.join(__dirname, '../public');
 app.use(express.static(publicPath));
 app.use('/auth', require('../routes/auth'))
 app.use('/dashboard', require('../routes/index'))
-
+app.use('/', require('../routes/index'))
+app.use('/logout', require('../routes/auth'))
 
 //Starting server on port 3000
 server.listen( PORT, () => {

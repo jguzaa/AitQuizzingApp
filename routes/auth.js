@@ -23,7 +23,7 @@ router.get(
 // @route   /auth/logout
 router.get('/logout', (req, res) => {
   req.session.destroy()
-  req.logout()
+  req.logout();
   res.redirect('/')
 })
 
