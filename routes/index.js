@@ -11,7 +11,7 @@ router.get('/', ensureGuest, function(req, res){
 // @desc    Dashboard
 // @route   GET /dashboard
 router.get('/dashboard', ensureAuth, function(req, res){
-    res.render('index.html', {
+    res.sendFile(path.join(__dirname+'/index.html'), {
         name: req.user.firstName,
     })
    

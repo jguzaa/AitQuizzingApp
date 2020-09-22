@@ -96,7 +96,7 @@ function addQuestion(){
 //Called when user wants to exit quiz creator
 function cancelQuiz(){
     if (confirm("Are you sure you want to exit? All work will be DELETED!")) {
-        window.location.href = "../";
+        window.location.href = "../dashboard";
     }
 }
 

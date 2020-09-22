@@ -22,8 +22,8 @@
         <h1 id = "title">Join a Game</h1>
         <form action="/player/">
                 <div class="form-field">
-                    <label id = "label">Display Name</label>
-                    <input id = "name" type = "text" name="name" autofocus/>
+                    <label id = "label">Welcome {{name}}</label>
+                    <input id = "name" type = "text" name={{name}} autofocus/>
                 </div>
                 <br>
                 <div class="form-field">
@@ -37,7 +37,7 @@
         
         </form>
         <br/>
-        <center><a href = "/create/" id = "host">Click here to host a Kahoot!</a></center>
+        <center><a href = "/create/" id = "host">Click here to host a Quizz!</a></center>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.14.1/ckeditor.js"
             integrity="sha256-bEIQpI72w9NJuIVhTLFUF2/8uxl0u5800r8ddViuv+o=" crossorigin="anonymous"></script>

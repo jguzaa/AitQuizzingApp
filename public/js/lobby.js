@@ -11,11 +11,11 @@ socket.on('connect', function() {
 
 //Boot player back to join screen if game pin has no match
 socket.on('noGameFound', function(){
-    window.location.href = '../';
+    window.location.href = '../dashboard';
 });
 //If the host disconnects, then the player is booted to main screen
 socket.on('hostDisconnect', function(){
-    window.location.href = '../';
+    window.location.href = '../dashboard';
 });
 
 //When the host clicks start game, the player screen changes
