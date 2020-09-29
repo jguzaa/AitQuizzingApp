@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Game | KahootClone</title>
+        <title>Game | QuizzingApp</title>
         <link rel = "stylesheet" href = "../../css/playerGameView.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
@@ -13,19 +13,41 @@
             <h4 id = "rankText"></h4>
         </div>
         <h2 id = "message"></h2>
-        <button onclick = "answerSubmitted(1)" id = "answer1" class = "button"></button>
-        <button onclick = "answerSubmitted(2)" id = "answer2" class = "button"></button>
-        <br>
-        <button onclick = "answerSubmitted(3)" id = "answer3" class = "button"></button>
-        <button onclick = "answerSubmitted(4)" id = "answer4" class = "button"></button>
+
+
+        <div id='sub'>
+            <div id="subAns"></div>
+            <br>
+            <button onclick="answerSubmitted(0)">Submit answer</button>
+        </div>
+        <div id='obj' class="ansDiv">
+            <button onclick="answerSubmitted(1)" id="answer1" class="button"></button>
+            <button onclick="answerSubmitted(2)" id="answer2" class="button"></button>
+            <br>
+            <button onclick="answerSubmitted(3)" id="answer3" class="button"></button>
+            <button onclick="answerSubmitted(4)" id="answer4" class="button"></button>
+        </div>
         <script src = "../../socket.io/socket.io.js"></script>
         <script src = "../../js/libs/jqueryLibrary.js"></script>
         <script src = "../../js/libs/deparam.js"></script>
         <script src = "../../js/playerGame.js"></script>
-        
+
         <!-- jQuery first, then Tether, then Bootstrap JS. -->
-        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#subAns').summernote(
+                    {
+                        toolbar: [],
+                        callbacks: {
+                            onChange: function (contents, $editable) {
+                                document.getElementById("subAns").innerHTML = contents;
+                            }
+                        }
+                    }
+                );
+            });
+        </script>
     </body>
 </html>

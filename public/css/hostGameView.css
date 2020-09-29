@@ -55,6 +55,12 @@
 #square4{
     background-color: #ff9933;
 }
+#squareCorect{
+    background-color: #4CAF50;
+}
+#squareIncorrect{
+    background-color: #f94a1e;
+}
 
 #nextQButton{
     display: none;

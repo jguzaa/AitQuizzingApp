@@ -1,3 +1,4 @@
+// to prevent yet to login user to get access to the game
 module.exports = {
   ensureAuth: function (req, res, next) {
     if (req.isAuthenticated()) {
