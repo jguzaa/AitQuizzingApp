@@ -269,6 +269,7 @@ io.on('connection', (socket) => {
 
                 var dbo = db.db('kahootDB');
                 var query = { id: parseInt(gameid) };
+                var wAns = null;
                 dbo.collection("kahootGames").find(query).toArray(function (err, res) {
                     if (err) throw err;
 
@@ -282,13 +283,58 @@ io.on('connection', (socket) => {
                             player.gameData.score += 100;
                             io.to(game.pin).emit('getTime', socket.id);
                             socket.emit('answerResult', true);
+                        } else {
+                            //keep wrong answer to vareable
+                            wAns = { id: 0, "stdName": playerNum[0].name, "questionId": res[0].id, "questionNo": gameQuestion - 1, "textWrongAns": ans, "choiceWrongAns": '' };
+                            //save wrong answer to db
+                            MongoClient.connect(url, function (err, db2) {
+                                if (err) throw err;
+                                var dbo2 = db2.db('kahootDB');
+                                dbo2.collection('kahootWrongAns').find({}).toArray(function (err, result) {
+                                    if (err) throw err;
+                                    var num = Object.keys(result).length;
+                                    if (num == 0) {
+                                        wAns.id = 1
+                                        num = 1
+                                    } else {
+                                        wAns.id = result[num - 1].id + 1;
+                                    }
+                                    dbo2.collection("kahootWrongAns").insertOne(wAns, function (err, res) {
+                                        if (err) throw err;
+                                        db2.close();
+                                    });
+                                });
+                            });
                         }
+
                     } else {
                         var correctAnswer = res[0].questions[gameQuestion - 1].objCorrect;
                         if (ans == correctAnswer) {
                             player.gameData.score += 100;
                             io.to(game.pin).emit('getTime', socket.id);
                             socket.emit('answerResult', true);
+                        } else {
+                            //keep wrong answer to vareable
+                            wAns = { id: 0, "stdName": playerNum[0].name, "questionId": res[0].id, "questionNo": gameQuestion - 1, "textWrongAns": '', "choiceWrongAns": ans };
+                            //save wrong answer to db
+                            MongoClient.connect(url, function (err, db2) {
+                                if (err) throw err;
+                                var dbo2 = db2.db('kahootDB');
+                                dbo2.collection('kahootWrongAns').find({}).toArray(function (err, result) {
+                                    if (err) throw err;
+                                    var num = Object.keys(result).length;
+                                    if (num == 0) {
+                                        wAns.id = 1
+                                        num = 1
+                                    } else {
+                                        wAns.id = result[num - 1].id + 1;
+                                    }
+                                    dbo2.collection("kahootWrongAns").insertOne(wAns, function (err, res) {
+                                        if (err) throw err;
+                                        db2.close();
+                                    });
+                                });
+                            });
                         }
                     }
 
@@ -304,13 +350,9 @@ io.on('connection', (socket) => {
                             playersAnswered: game.gameData.playersAnswered
                         });
                     }
-
                     db.close();
                 });
             });
-
-
-
         }
     });
 
@@ -540,7 +582,6 @@ io.on('connection', (socket) => {
             });
 
         });
-
 
     });
 
