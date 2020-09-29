@@ -19,7 +19,7 @@ socket.on('noGameFound', function () {
 
 socket.on('gameQuestions', function (data) {
 
-    document.getElementById('questionNum').innerHTML = 'Question : ' + data.qNum +' / ' + data.qLength;
+    document.getElementById('questionNum').innerHTML = 'Question : ' + data.qNum + ' / ' + data.qLength;
 
     if (data.qtype == 'subQ') {
         document.getElementById("subQ").style.display = "block";
@@ -60,8 +60,26 @@ socket.on('questionOver', function (playerData, questionType, subAns, objCorrect
 
     if (questionType == 'subQ') {
 
+        document.getElementById('subAns').innerHTML = "The answer is :<br>" + subAns;
 
+        for (var i = 0; i < playerData.length; i++) {
+            if (playerData[i].gameData.answer == subAns) {
+                answerCorrect += 1;
+            } else {
+                answerIncorrect += 1;
+            } 
+            total += 1;
+        }
 
+        //Gets values for graph
+        answerCorrect = answerCorrect / total * 100;
+        answerIncorrect = answerIncorrect / total * 100;
+
+        document.getElementById('squareCorrect').style.display = "inline-block";
+        document.getElementById('squareIncorrect').style.display = "inline-block";
+
+        document.getElementById('squareCorrect').style.height = answerCorrect + "px";
+        document.getElementById('squareIncorrect').style.height = answerIncorrect + "px";
 
     } else {
         //Shows user correct answer with effects on elements
@@ -132,6 +150,8 @@ function nextQuestion() {
     document.getElementById('square2').style.display = "none";
     document.getElementById('square3').style.display = "none";
     document.getElementById('square4').style.display = "none";
+    document.getElementById('squareCorrect').style.display = "none";
+    document.getElementById('squareIncorrect').style.display = "none";
 
     document.getElementById('answer1').style.filter = "none";
     document.getElementById('answer2').style.filter = "none";
@@ -140,10 +160,11 @@ function nextQuestion() {
 
     document.getElementById("subQ").style.display = "none";
     document.getElementById("objQ").style.display = "none";
-    
+
     document.getElementById('playersAnswered').style.display = "block";
     document.getElementById('timerText').style.display = "block";
     document.getElementById('num').innerHTML = "";
+    document.getElementById('subAns').innerHTML = "Please type the answer in text field";
     socket.emit('nextQuestion'); //Tell server to start new question
 }
 
@@ -162,6 +183,9 @@ socket.on('GameOver', function (data) {
     document.getElementById('square2').style.display = "none";
     document.getElementById('square3').style.display = "none";
     document.getElementById('square4').style.display = "none";
+    document.getElementById('squareCorrect').style.display = "none";
+    document.getElementById('squareIncorrect').style.display = "none";
+    document.getElementById('subAns').style.display = "none";
 
     document.getElementById('answer1').style.display = "none";
     document.getElementById('answer2').style.display = "none";

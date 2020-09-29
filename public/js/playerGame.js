@@ -53,6 +53,9 @@ socket.on('questionOver', function (data) {
     }
     document.getElementById("sub").style.display = "none";
     document.getElementById("obj").style.display = "none";
+    document.getElementById('subAns').innerHTML = '';
+    $('#subAns').summernote('reset');
+
     socket.emit('getScore');
 });
 
@@ -103,6 +106,7 @@ socket.on('GameOver', function () {
     document.getElementById('answer2').style.visibility = "hidden";
     document.getElementById('answer3').style.visibility = "hidden";
     document.getElementById('answer4').style.visibility = "hidden";
+    document.getElementById('sub').style.visibility = "hidden";
     document.getElementById('message').style.display = "block";
     document.getElementById('message').innerHTML = "GAME OVER";
 });
