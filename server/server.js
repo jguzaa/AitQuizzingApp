@@ -46,7 +46,9 @@ app.use(passport.session())
 
 //Mongodb setup
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+const url = "mongodb+srv://jongjet:jongjet25@cluster0.mljmt.mongodb.net/kahootDB?retryWrites=true&w=majority";
+//const MongoClient = new MongoClientT(url, { useNewUrlParser: true });
+//var url = "mongodb://localhost:27017/";
 
 //set up some shared vars
 var questionType = '';
