@@ -128,3 +128,15 @@ footer {
     background-color: Black;
     color: white;
 }
+
+footer {
+    font-family: 'Raleway', sans-serif;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 3px;
+    background-color: Black;
+    color: white;
+}

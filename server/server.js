@@ -150,12 +150,11 @@ io.on('connection', (socket) => {
                         qLength: length,
                         qNum: 1
                     });
+                    io.to(game.pin).emit('gameStartedPlayer');
                     db.close();
                 });
             });
 
-
-            io.to(game.pin).emit('gameStartedPlayer');
             game.gameData.questionLive = true;
         } else {
             socket.emit('noGameFound');//No game was found, redirect user
@@ -453,6 +452,8 @@ io.on('connection', (socket) => {
                         qNum: questionNum + 1
                     });
 
+                    io.to(game.pin).emit('nextQuestionPlayer', questionType);
+
                     db.close();
                 } else {
                     var playersInGame = players.getPlayers(game.hostId);
@@ -533,7 +534,6 @@ io.on('connection', (socket) => {
                         num5: fifth.name
                     });
                 }
-                io.to(game.pin).emit('nextQuestionPlayer', questionType);
             });
         });
 
