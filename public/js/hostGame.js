@@ -62,8 +62,15 @@ socket.on('questionOver', function (playerData, questionType, subAns, objCorrect
 
         document.getElementById('subAns').innerHTML = "The answer is :<br>" + subAns;
 
+        //remove space btw char
+        var subAnsTemp = subAns.replace(/ /g, '');
+
         for (var i = 0; i < playerData.length; i++) {
-            if (playerData[i].gameData.answer == subAns) {
+
+            //remove space btw char
+            var ansTemp = playerData[i].gameData.answer.replace(/ /g, '');
+
+            if (ansTemp == subAnsTemp) {
                 answerCorrect += 1;
             } else {
                 answerIncorrect += 1;
