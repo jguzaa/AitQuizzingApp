@@ -278,8 +278,12 @@ io.on('connection', (socket) => {
                         //subAns genenrate
                         var subAns = res[0].questions[gameQuestion - 1].subAns;
 
+                        //remove space btw char
+                        var subAnsTemp = subAns.replace(/ /g, '');
+                        var ansTemp = ans.replace(/ /g, '');
+
                         //match the answer
-                        if (ans == subAns) {
+                        if (ansTemp == subAnsTemp) {
                             player.gameData.score += 100;
                             io.to(game.pin).emit('getTime', socket.id);
                             socket.emit('answerResult', true);
