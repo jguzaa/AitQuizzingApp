@@ -67,8 +67,10 @@ socket.on('questionOver', function (playerData, questionType, subAns, objCorrect
 
         for (var i = 0; i < playerData.length; i++) {
 
+            var ansTemp = '';
             //remove space btw char
-            var ansTemp = playerData[i].gameData.answer.replace(/ /g, '');
+            if(playerData[i].gameData.answer != 0)
+                ansTemp = (playerData[i].gameData.answer).replace(/ /g, '');
 
             if (ansTemp == subAnsTemp) {
                 answerCorrect += 1;
