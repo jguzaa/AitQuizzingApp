@@ -290,7 +290,7 @@ io.on('connection', (socket) => {
                             socket.emit('answerResult', true);
                         } else {
                             //keep wrong answer to vareable
-                            wAns = { id: 0, "stdName": playerNum[0].name, "questionId": res[0].id, "questionNo": gameQuestion - 1, "textWrongAns": ans, "choiceWrongAns": '' };
+                            wAns = { id: 0, "stdName": player.name, "questionId": res[0].id, "questionNo": gameQuestion - 1, "textWrongAns": ans, "choiceWrongAns": '' };
                             //save wrong answer to db
                             MongoClient.connect(url, function (err, db2) {
                                 if (err) throw err;
@@ -320,7 +320,7 @@ io.on('connection', (socket) => {
                             socket.emit('answerResult', true);
                         } else {
                             //keep wrong answer to vareable
-                            wAns = { id: 0, "stdName": playerNum[0].name, "questionId": res[0].id, "questionNo": gameQuestion - 1, "textWrongAns": '', "choiceWrongAns": ans };
+                            wAns = { id: 0, "stdName": player.name, "questionId": res[0].id, "questionNo": gameQuestion - 1, "textWrongAns": '', "choiceWrongAns": ans };
                             //save wrong answer to db
                             MongoClient.connect(url, function (err, db2) {
                                 if (err) throw err;

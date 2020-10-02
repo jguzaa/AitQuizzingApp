@@ -213,11 +213,16 @@ socket.on('GameOver', function (data) {
     document.getElementById('winner5').style.display = "block";
     document.getElementById('winnerTitle').style.display = "block";
 
+    //==============================================fix===================================================
     document.getElementById('winner1').innerHTML = "1. " + data.num1;
-    document.getElementById('winner2').innerHTML = "2. " + data.num2;
-    document.getElementById('winner3').innerHTML = "3. " + data.num3;
-    document.getElementById('winner4').innerHTML = "4. " + data.num4;
-    document.getElementById('winner5').innerHTML = "5. " + data.num5;
+    if(data.num2 != "")
+        document.getElementById('winner2').innerHTML = "2. " + data.num2;
+    if(data.num3 != "")
+        document.getElementById('winner3').innerHTML = "3. " + data.num3;
+    if(data.num4 != "")
+        document.getElementById('winner4').innerHTML = "4. " + data.num4;
+    if(data.num5 != "")
+        document.getElementById('winner5').innerHTML = "5. " + data.num5;
 });
 
 
