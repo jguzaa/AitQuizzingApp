@@ -64,6 +64,10 @@ socket.on('questionOver', function (playerData, questionType, subAns, objCorrect
 
         //remove space btw char
         var subAnsTemp = subAns.replace(/ /g, '');
+        subAnsTemp = subAnsTemp.replace(/<p>/g, '');
+        subAnsTemp = subAnsTemp.replace(/<\/p>/g, '');
+        subAnsTemp = subAnsTemp.replace(/&nbsp;/g, '');
+        subAnsTemp = subAnsTemp.replace(/<br>/g, '');
 
         for (var i = 0; i < playerData.length; i++) {
 
@@ -71,6 +75,10 @@ socket.on('questionOver', function (playerData, questionType, subAns, objCorrect
             //remove space btw char
             if(playerData[i].gameData.answer != 0)
                 ansTemp = (playerData[i].gameData.answer).replace(/ /g, '');
+                ansTemp = ansTemp.replace(/<p>/g, '');
+                ansTemp = ansTemp.replace(/<\/p>/g, '');
+                ansTemp = ansTemp.replace(/&nbsp;/g, '');
+                ansTemp = ansTemp.replace(/<br>/g, '');
 
             if (ansTemp == subAnsTemp) {
                 answerCorrect += 1;

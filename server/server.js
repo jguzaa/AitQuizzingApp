@@ -281,7 +281,15 @@ io.on('connection', (socket) => {
 
                         //remove space btw char
                         var subAnsTemp = subAns.replace(/ /g, '');
+                        subAnsTemp = subAnsTemp.replace(/<p>/g, '');
+                        subAnsTemp = subAnsTemp.replace(/<\/p>/g, '');
+                        subAnsTemp = subAnsTemp.replace(/&nbsp;/g, '');
+                        subAnsTemp = subAnsTemp.replace(/<br>/g, '');
                         var ansTemp = ans.replace(/ /g, '');
+                        ansTemp = ansTemp.replace(/<p>/g, '');
+                        ansTemp = ansTemp.replace(/<\/p>/g, '');
+                        ansTemp = ansTemp.replace(/&nbsp;/g, '');
+                        ansTemp = ansTemp.replace(/<br>/g, '');
 
                         //match the answer
                         if (ansTemp == subAnsTemp) {
