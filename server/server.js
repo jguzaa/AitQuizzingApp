@@ -3,26 +3,13 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-const dotenv = require('dotenv')
-const mongoose = require('mongoose');
-require('dotenv').config();
+
 //passport
-const passport = require('passport')
-const session = require('express-session')
-const connectDB = require('../config/db')
-const MongoStore = require('connect-mongo')(session)
-// Load config
-dotenv.config({ path: './config/config.env' })
-
-//passport config
-require('../config/passport')(passport)
-
-connectDB()
+var passport = require('passport')
 
 //Import classes
 const { LiveGames } = require('./utils/liveGames');
 const { Players } = require('./utils/players');
-
 
 //create new Express applicaiton
 var app = express();
@@ -32,43 +19,83 @@ var games = new LiveGames();
 var players = new Players();
 
 // Session
+var session = require('express-session')
 app.use(session({
-    secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
-}))
-
-// Passaport middleware
-app.use(passport.initialize())
-app.use(passport.session())
+    saveUninitialized: true,
+    secret: 'SECRET'
+}));
 
 //Mongodb setup
 var MongoClient = require('mongodb').MongoClient;
 const url = "mongodb+srv://jongjet:jongjet25@cluster0.mljmt.mongodb.net/kahootDB?retryWrites=true&w=majority";
-//const MongoClient = new MongoClientT(url, { useNewUrlParser: true });
 //var url = "mongodb://localhost:27017/";
 
 //set up some shared vars
-var questionType = '';
+var questionType;
+var userProfile;
 
+//server
 const PORT = process.env.PORT || 3000
-
-//Routes
-const publicPath = path.join(__dirname, '../public');
-app.use(express.static(publicPath));
-app.use('/auth', require('../routes/auth'))
-app.use('/dashboard', require('../routes/index'))
-app.use('/', require('../routes/index'))
-app.use('/logout', require('../routes/auth'))
-
 //Starting server on port 3000
 server.listen(PORT, () => {
     console.log("Server started on port 3000");
 });
 
+// Passaport middleware
+app.use(passport.initialize())
+app.use(passport.session())
+
+//Routes
+const publicPath = path.join(__dirname, '../public');
+app.use(express.static(publicPath));
+
+app.get('/dashboard', (req, res) => {
+    res.redirect(publicPath + '/dashboard/index.html');
+});
+
+//passport
+passport.serializeUser(function (user, cb) {
+    cb(null, user);
+});
+
+passport.deserializeUser(function (obj, cb) {
+    cb(null, obj);
+});
+
+
+/*  Google AUTH  */
+
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const GOOGLE_CLIENT_ID = '439367921699-nvmbkirpvjaak96ssojnnl9fc71b7j06.apps.googleusercontent.com';
+const GOOGLE_CLIENT_SECRET = 'BV3EDuvEiKM_SY6W0xHSGIIN';
+
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/callback"
+},
+    function (accessToken, refreshToken, profile, done) {
+        userProfile = profile;
+        return done(null, userProfile);
+    }
+));
+
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/error' }),
+    function (req, res) {
+        // Successful authentication, redirect success.
+        res.redirect('/dashboard');
+    });
+
+
 //When a connection to server is made from client
 io.on('connection', (socket) => {
+
+    //When user go to dash board
 
     //When host connects for the first time
     socket.on('host-join', (data) => {
