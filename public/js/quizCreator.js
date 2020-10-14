@@ -18,7 +18,7 @@ function updateDatabase() {
         questions.push({ "question": question, "questionType": questionType, "subAns": subAns, "objChoice": objChoice, "objCorrect": objCorrect, "time": time })
     }
 
-    var quiz = { id: 0, "name": name, "questions": questions };
+    var quiz = { id: 0, "name": name, "questions": questions, tName: sessionStorage.getItem("name") };
     socket.emit('newQuiz', quiz);
 }
 
@@ -71,7 +71,7 @@ function addQuestion() {
 
     questionTypeField.setAttribute('name', 'questionType');
     questionTypeField.setAttribute('id', 'qType' + String(questionNum));
-    questionTypeField.setAttribute('onchange', 'qSwap'+String(questionNum)+'()');
+    questionTypeField.setAttribute('onchange', 'qSwap' + String(questionNum) + '()');
 
     option1.setAttribute('value', 'none')
     option1.innerHTML = "Please Select"
@@ -80,11 +80,11 @@ function addQuestion() {
     option3.setAttribute('value', 'subQ')
     option3.innerHTML = "Subjective"
 
-    objQField.setAttribute('id','objQuestion'+String(questionNum))
-    objQField.setAttribute('style','display: none;')
+    objQField.setAttribute('id', 'objQuestion' + String(questionNum))
+    objQField.setAttribute('style', 'display: none;')
 
-    subQField.setAttribute('id','subQuestion'+String(questionNum))
-    subQField.setAttribute('style','display: none;')
+    subQField.setAttribute('id', 'subQuestion' + String(questionNum))
+    subQField.setAttribute('style', 'display: none;')
 
     subQField.innerHTML = '<div id="subAns' + String(questionNum) + '"></div>'
 
@@ -94,7 +94,7 @@ function addQuestion() {
         $('#q` + String(questionNum) + `').summernote({
             callbacks: {
                 onChange: function (contents, $editable) {
-                    document.getElementById('q` + String(questionNum) +`').innerHTML = contents;
+                    document.getElementById('q` + String(questionNum) + `').innerHTML = contents;
                 }
             }
         });
@@ -182,7 +182,7 @@ function addQuestion() {
     timeField.setAttribute('id', 'time' + String(questionNum));
     timeField.setAttribute('type', 'number');
 
-    newQuestionDiv.setAttribute('id', 'question-field');//Sets class of div
+    newQuestionDiv.setAttribute('id', 'question-field'); //Sets class of div
 
     newQuestionDiv.appendChild(questionLabel);
     newQuestionDiv.appendChild(questionField);
@@ -214,8 +214,8 @@ function addQuestion() {
     newQuestionDiv.appendChild(timeLabel);
     newQuestionDiv.appendChild(timeField);
 
-    questionsDiv.appendChild(document.createElement('br'));//Creates a break between each question
-    questionsDiv.appendChild(newQuestionDiv);//Adds the question div to the screen
+    questionsDiv.appendChild(document.createElement('br')); //Creates a break between each question
+    questionsDiv.appendChild(newQuestionDiv); //Adds the question div to the screen
 
     newQuestionDiv.style.backgroundColor = randomColor();
 }
@@ -227,7 +227,8 @@ function cancelQuiz() {
     }
 }
 
-socket.on('startGameFromCreator', function (data) {
+socket.on('startGameFromCreator', function(data) {
+    ////===================Fix id==========================////
     window.location.href = "../../host/?id=" + data;
 });
 

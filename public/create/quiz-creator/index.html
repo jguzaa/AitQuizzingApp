@@ -17,140 +17,144 @@
 </head>
 
 <body onload="setBGColor()">
-    <h1 id="title">Quiz Creator Studio</h1>
 
-    <div class="form-field">
-        <label id="quizTitle">Quiz Title</label>
-        <input id="name" type="text" name="name" autofocus />
-    </div>
-    <br>
-    <br>
-    <div id="allQuestions">
-        <div id="question-field">
-            <label>Question 1: </label>
-            <div id='q1'></div>
-            <br>
-            <label for="questionType">Choose a type of question:</label>
-            <select name="questionType" id="qType1" onchange="qSwap1()">
+    <div class="content">
+        <h2 id="title">Quiz Creator Studio</h2>
+
+        <div class="form-field" id='title-field'>
+            <label id="quizTitle">Quiz Title</label><br>
+            <input id="name" type="text" name="name" autofocus style="width: 400px;" />
+        </div>
+        <br>
+        <br>
+        <div id="allQuestions">
+            <div id="question-field">
+                <label>Question 1: </label>
+                <div id='q1'></div>
+                <br>
+                <label for="questionType">Choose a type of question:</label>
+                <select name="questionType" id="qType1" onchange="qSwap1()">
                 <option value="none">Please Select</option>
                 <option value="objQ">Objective</option>
                 <option value="subQ">Subjective</option>
             </select>
-            <br>
-            <br>
-            <div id="objQuestion1" style="display: none;">
-                <label>Answer 1: </label>
-                <div id="1a1"></div>
-                <label>Answer 2: </label>
-                <div id="1a2"></div>
-                <label>Answer 3: </label>
-                <div id="1a3"></div>
-                <label>Answer 4: </label>
-                <div id="1a4"></div>
                 <br>
                 <br>
-                <label>Correct Answer (1-4) :</label>
-                <input id="correct1" type="number" autofocus />
+                <div id="objQuestion1" style="display: none;">
+                    <label>Answer 1: </label>
+                    <div id="1a1"></div>
+                    <label>Answer 2: </label>
+                    <div id="1a2"></div>
+                    <label>Answer 3: </label>
+                    <div id="1a3"></div>
+                    <label>Answer 4: </label>
+                    <div id="1a4"></div>
+                    <br>
+                    <br>
+                    <label>Correct Answer (1-4) :</label>
+                    <input id="correct1" type="number" autofocus />
+                </div>
+                <div id="subQuestion1" style="display: none;">
+                    <div id="subAns1"></div>
+                </div>
+                <label>Time (Second) :</label>
+                <input id="time1" type="number" autofocus />
             </div>
-            <div id="subQuestion1" style="display: none;">
-                <div id="subAns1"></div>
-            </div>
-            <label>Time (Second) :</label>
-            <input id="time1" type="number" autofocus />
-        </div>
-        <script>
+            <script>
+                $(document).ready(function() {
 
-            $(document).ready(function () {
-
-                $('#q1').summernote({
-                    callbacks: {
-                        onChange: function (contents, $editable) {
-                            document.getElementById("q1").innerHTML = contents;
+                    $('#q1').summernote({
+                        callbacks: {
+                            onChange: function(contents, $editable) {
+                                document.getElementById("q1").innerHTML = contents;
+                            }
                         }
-                    }
-                });
+                    });
 
-                $('#subAns1').summernote(
-                    {
+                    $('#subAns1').summernote({
                         toolbar: [
                             ['para', ['paragraph']]
                         ],
                         callbacks: {
-                            onChange: function (contents, $editable) {
+                            onChange: function(contents, $editable) {
                                 document.getElementById("subAns1").innerHTML = contents;
                             }
                         }
-                    }
-                );
+                    });
 
-                $('#1a1').summernote({
-                    callbacks: {
-                        onChange: function (contents, $editable) {
-                            document.getElementById('1a1').innerHTML = contents;
+                    $('#1a1').summernote({
+                        callbacks: {
+                            onChange: function(contents, $editable) {
+                                document.getElementById('1a1').innerHTML = contents;
+                            }
                         }
-                    }
+                    });
+
+                    $('#1a2').summernote({
+                        callbacks: {
+                            onChange: function(contents, $editable) {
+                                document.getElementById('1a2').innerHTML = contents;
+                            }
+                        }
+                    });
+
+                    $('#1a3').summernote({
+                        callbacks: {
+                            onChange: function(contents, $editable) {
+                                document.getElementById('1a3').innerHTML = contents;
+                            }
+                        }
+                    });
+
+                    $('#1a4').summernote({
+                        callbacks: {
+                            onChange: function(contents, $editable) {
+                                document.getElementById('1a4').innerHTML = contents;
+                            }
+                        }
+                    });
                 });
 
-                $('#1a2').summernote({
-                    callbacks: {
-                        onChange: function (contents, $editable) {
-                            document.getElementById('1a2').innerHTML = contents;
-                        }
+                function qSwap1() {
+
+                    var type = document.getElementById("qType1")
+
+                    var type = document.getElementById("qType1").value;
+                    if (type == "objQ") {
+                        document.getElementById("objQuestion1").style.display = "block";
+                        document.getElementById("subQuestion1").style.display = "none";
+                    } else if (type == "subQ") {
+                        document.getElementById("objQuestion1").style.display = "none";
+                        document.getElementById("subQuestion1").style.display = "block";
+                    } else {
+                        document.getElementById("objQuestion1").style.display = "none";
+                        document.getElementById("subQuestion1").style.display = "none";
                     }
-                });
-
-                $('#1a3').summernote({
-                    callbacks: {
-                        onChange: function (contents, $editable) {
-                            document.getElementById('1a3').innerHTML = contents;
-                        }
-                    }
-                });
-
-                $('#1a4').summernote({
-                    callbacks: {
-                        onChange: function (contents, $editable) {
-                            document.getElementById('1a4').innerHTML = contents;
-                        }
-                    }
-                });
-            });
-
-            function qSwap1() {
-
-                var type = document.getElementById("qType1")
-
-                var type = document.getElementById("qType1").value;
-                if (type == "objQ") {
-                    document.getElementById("objQuestion1").style.display = "block";
-                    document.getElementById("subQuestion1").style.display = "none";
-                } else if (type == "subQ") {
-                    document.getElementById("objQuestion1").style.display = "none";
-                    document.getElementById("subQuestion1").style.display = "block";
-                } else {
-                    document.getElementById("objQuestion1").style.display = "none";
-                    document.getElementById("subQuestion1").style.display = "none";
                 }
-            }
-        </script>
+            </script>
+        </div>
+
+        <div id="btn">
+            <button onclick="addQuestion()">Add another question</button>
+            <br>
+            <br>
+            <div class="form-field">
+                <button onclick="updateDatabase()">Create Quiz</button>
+            </div>
+            <br>
+            <button onclick='cancelQuiz()'>Cancel quiz and return to quiz selection</button>
+        </div>
+
     </div>
-    <br>
-    <button onclick="addQuestion()">Add another question</button>
 
-    <br>
-    <br>
-
-    <div class="form-field">
-        <button onclick="updateDatabase()">Create Quiz</button>
-    </div>
-
-    <br>
-
-    <button onclick='cancelQuiz()'>Cancel quiz and return to quiz selection</button>
+    <footer>
+        <p>Dev and design by @AIT<br>
+            <img src="../../imgs/logo.png" alt="Logo" style="height: 50px;">
+    </footer>
 
     <script src="../../socket.io/socket.io.js"></script>
     <script src="../../js/quizCreator.js"></script>
-    
+
 </body>
 
 </html>

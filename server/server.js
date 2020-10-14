@@ -28,8 +28,8 @@ app.use(session({
 
 //Mongodb setup
 var MongoClient = require('mongodb').MongoClient;
-const url = "mongodb+srv://jongjet:jongjet25@cluster0.mljmt.mongodb.net/kahootDB?retryWrites=true&w=majority";
-//var url = "mongodb://localhost:27017/";
+//const url = "mongodb+srv://jongjet:jongjet25@cluster0.mljmt.mongodb.net/kahootDB?retryWrites=true&w=majority";
+const url = "mongodb://localhost:27017/";
 
 //set up some shared vars
 var questionType;
@@ -37,7 +37,7 @@ var userProfile;
 
 //server
 const PORT = process.env.PORT || 3000
-//Starting server on port 3000
+    //Starting server on port 3000
 server.listen(PORT, () => {
     console.log("Server started on port 3000");
 });
@@ -55,11 +55,11 @@ app.get('/dashboard', (req, res) => {
 });
 
 //passport
-passport.serializeUser(function (user, cb) {
+passport.serializeUser(function(user, cb) {
     cb(null, user);
 });
 
-passport.deserializeUser(function (obj, cb) {
+passport.deserializeUser(function(obj, cb) {
     cb(null, obj);
 });
 
@@ -71,11 +71,11 @@ const GOOGLE_CLIENT_ID = '439367921699-nvmbkirpvjaak96ssojnnl9fc71b7j06.apps.goo
 const GOOGLE_CLIENT_SECRET = 'BV3EDuvEiKM_SY6W0xHSGIIN';
 
 passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/callback"
-},
-    function (accessToken, refreshToken, profile, done) {
+        clientID: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:3000/auth/google/callback"
+    },
+    function(accessToken, refreshToken, profile, done) {
         userProfile = profile;
         return done(null, userProfile);
     }
@@ -86,9 +86,20 @@ app.get('/auth/google',
 
 app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/error' }),
-    function (req, res) {
+    function(req, res) {
+        var name = userProfile.emails[0].value;
+        var pos = name.search('@');
+        name = name.slice(0, pos);
+
+        if (parseInt(name)) {
+            sid = name;
+            name = userProfile.displayName;
+        } else {
+            sid = 'na';
+        }
+
         // Successful authentication, redirect success.
-        res.redirect('/dashboard');
+        res.redirect('/dashboard?name=' + name + '&sid=' + sid);
     });
 
 
@@ -101,11 +112,11 @@ io.on('connection', (socket) => {
     socket.on('host-join', (data) => {
 
         //Check to see if id passed in url corresponds to id of kahoot game in database
-        MongoClient.connect(url, function (err, db) {
+        MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db("kahootDB");
             var query = { id: parseInt(data.id) };
-            dbo.collection('kahootGames').find(query).toArray(function (err, result) {
+            dbo.collection('kahootGames').find(query).toArray(function(err, result) {
                 if (err) throw err;
 
                 //A kahoot was found with the id passed in url
@@ -116,7 +127,7 @@ io.on('connection', (socket) => {
 
                     var game = games.getGame(socket.id); //Gets the game data
 
-                    socket.join(game.pin);//The host is joining a room based on the pin
+                    socket.join(game.pin); //The host is joining a room based on the pin
 
                     console.log('Game Created with pin:', game.pin);
 
@@ -136,11 +147,11 @@ io.on('connection', (socket) => {
     //When the host connects from the game view
     socket.on('host-join-game', (data) => {
         var oldHostId = data.id;
-        var game = games.getGame(oldHostId);//Gets game with old host id
+        var game = games.getGame(oldHostId); //Gets game with old host id
         if (game) {
-            game.hostId = socket.id;//Changes the game host id to new host id
+            game.hostId = socket.id; //Changes the game host id to new host id
             socket.join(game.pin);
-            var playerData = players.getPlayers(oldHostId);//Gets player in game
+            var playerData = players.getPlayers(oldHostId); //Gets player in game
             for (var i = 0; i < Object.keys(players.players).length; i++) {
                 if (players.players[i].hostId == oldHostId) {
                     players.players[i].hostId = socket.id;
@@ -148,12 +159,12 @@ io.on('connection', (socket) => {
             }
             var gameid = game.gameData['gameid'];
 
-            MongoClient.connect(url, function (err, db) {
+            MongoClient.connect(url, function(err, db) {
                 if (err) throw err;
 
                 var dbo = db.db('kahootDB');
                 var query = { id: parseInt(gameid) };
-                dbo.collection("kahootGames").find(query).toArray(function (err, res) {
+                dbo.collection("kahootGames").find(query).toArray(function(err, res) {
                     if (err) throw err;
                     var length = res[0].questions.length;
                     var question = res[0].questions[0].question;
@@ -183,7 +194,7 @@ io.on('connection', (socket) => {
 
             game.gameData.questionLive = true;
         } else {
-            socket.emit('noGameFound');//No game was found, redirect user
+            socket.emit('noGameFound'); //No game was found, redirect user
         }
     });
 
@@ -207,7 +218,7 @@ io.on('connection', (socket) => {
 
                 var playersInGame = players.getPlayers(hostId); //Getting all players in game
 
-                io.to(params.pin).emit('updatePlayerLobby', playersInGame);//Sending host player data to display
+                io.to(params.pin).emit('updatePlayerLobby', playersInGame); //Sending host player data to display
                 gameFound = true; //Game has been found
             }
         }
@@ -226,12 +237,12 @@ io.on('connection', (socket) => {
         if (player) {
             var game = games.getGame(player.hostId);
             socket.join(game.pin);
-            player.playerId = socket.id;//Update player id with socket id
+            player.playerId = socket.id; //Update player id with socket id
 
             var playerData = players.getPlayers(game.hostId);
             socket.emit('playerGameData', playerData, questionType);
         } else {
-            socket.emit('noGameFound');//No player found
+            socket.emit('noGameFound'); //No player found
         }
 
     });
@@ -243,7 +254,7 @@ io.on('connection', (socket) => {
         if (game) {
             //Checking to see if host was disconnected or was sent to game view
             if (game.gameLive == false) {
-                games.removeGame(socket.id);//Remove the game from games class
+                games.removeGame(socket.id); //Remove the game from games class
                 console.log('Game ended with pin:', game.pin);
 
                 var playersToRemove = players.getPlayers(game.hostId); //Getting all players in the game
@@ -261,15 +272,15 @@ io.on('connection', (socket) => {
             var player = players.getPlayer(socket.id); //Getting player with socket.id
             //If a player has been found with that id
             if (player) {
-                var hostId = player.hostId;//Gets id of host of the game
-                var game = games.getGame(hostId);//Gets game data with hostId
-                var pin = game.pin;//Gets the pin of the game
+                var hostId = player.hostId; //Gets id of host of the game
+                var game = games.getGame(hostId); //Gets game data with hostId
+                var pin = game.pin; //Gets the pin of the game
 
                 if (game.gameLive == false) {
-                    players.removePlayer(socket.id);//Removes player from players class
-                    var playersInGame = players.getPlayers(hostId);//Gets remaining players in game
+                    players.removePlayer(socket.id); //Removes player from players class
+                    var playersInGame = players.getPlayers(hostId); //Gets remaining players in game
 
-                    io.to(pin).emit('updatePlayerLobby', playersInGame);//Sends data to host to update screen
+                    io.to(pin).emit('updatePlayerLobby', playersInGame); //Sends data to host to update screen
                     socket.leave(pin); //Player is leaving the room
 
                 }
@@ -279,25 +290,25 @@ io.on('connection', (socket) => {
     });
 
     //Sets data in player class to answer from player
-    socket.on('playerAnswer', function (ans) {
+    socket.on('playerAnswer', function(ans) {
         var player = players.getPlayer(socket.id);
         var hostId = player.hostId;
         var playerNum = players.getPlayers(hostId);
         var game = games.getGame(hostId);
-        if (game.gameData.questionLive == true) {//if the question is still live
+        if (game.gameData.questionLive == true) { //if the question is still live
             player.gameData.answer = ans;
             game.gameData.playersAnswered += 1;
 
             var gameQuestion = game.gameData.question;
             var gameid = game.gameData.gameid;
 
-            MongoClient.connect(url, function (err, db) {
+            MongoClient.connect(url, function(err, db) {
                 if (err) throw err;
 
                 var dbo = db.db('kahootDB');
                 var query = { id: parseInt(gameid) };
                 var wAns = null;
-                dbo.collection("kahootGames").find(query).toArray(function (err, res) {
+                dbo.collection("kahootGames").find(query).toArray(function(err, res) {
                     if (err) throw err;
 
                     //Checks player answer with correct answer
@@ -326,10 +337,10 @@ io.on('connection', (socket) => {
                             //keep wrong answer to vareable
                             wAns = { id: 0, "stdName": player.name, "questionId": res[0].id, "questionNo": gameQuestion - 1, "textWrongAns": ans, "choiceWrongAns": '' };
                             //save wrong answer to db
-                            MongoClient.connect(url, function (err, db2) {
+                            MongoClient.connect(url, function(err, db2) {
                                 if (err) throw err;
                                 var dbo2 = db2.db('kahootDB');
-                                dbo2.collection('kahootWrongAns').find({}).toArray(function (err, result) {
+                                dbo2.collection('kahootWrongAns').find({}).toArray(function(err, result) {
                                     if (err) throw err;
                                     var num = Object.keys(result).length;
                                     if (num == 0) {
@@ -338,7 +349,7 @@ io.on('connection', (socket) => {
                                     } else {
                                         wAns.id = result[num - 1].id + 1;
                                     }
-                                    dbo2.collection("kahootWrongAns").insertOne(wAns, function (err, res) {
+                                    dbo2.collection("kahootWrongAns").insertOne(wAns, function(err, res) {
                                         if (err) throw err;
                                         db2.close();
                                     });
@@ -356,10 +367,10 @@ io.on('connection', (socket) => {
                             //keep wrong answer to vareable
                             wAns = { id: 0, "stdName": player.name, "questionId": res[0].id, "questionNo": gameQuestion - 1, "textWrongAns": '', "choiceWrongAns": ans };
                             //save wrong answer to db
-                            MongoClient.connect(url, function (err, db2) {
+                            MongoClient.connect(url, function(err, db2) {
                                 if (err) throw err;
                                 var dbo2 = db2.db('kahootDB');
-                                dbo2.collection('kahootWrongAns').find({}).toArray(function (err, result) {
+                                dbo2.collection('kahootWrongAns').find({}).toArray(function(err, result) {
                                     if (err) throw err;
                                     var num = Object.keys(result).length;
                                     if (num == 0) {
@@ -368,7 +379,7 @@ io.on('connection', (socket) => {
                                     } else {
                                         wAns.id = result[num - 1].id + 1;
                                     }
-                                    dbo2.collection("kahootWrongAns").insertOne(wAns, function (err, res) {
+                                    dbo2.collection("kahootWrongAns").insertOne(wAns, function(err, res) {
                                         if (err) throw err;
                                         db2.close();
                                     });
@@ -381,7 +392,7 @@ io.on('connection', (socket) => {
                     if (game.gameData.playersAnswered == playerNum.length) {
                         game.gameData.questionLive = false; //Question has been ended bc players all answered under time
                         var playerData = players.getPlayers(game.hostId);
-                        io.to(game.pin).emit('questionOver', playerData, questionType, subAns, correctAnswer);//Tell everyone that question is over
+                        io.to(game.pin).emit('questionOver', playerData, questionType, subAns, correctAnswer); //Tell everyone that question is over
                     } else {
                         //update host screen of num players answered
                         io.to(game.pin).emit('updatePlayersAnswered', {
@@ -395,12 +406,12 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('getScore', function () {
+    socket.on('getScore', function() {
         var player = players.getPlayer(socket.id);
         socket.emit('newScore', player.gameData.score);
     });
 
-    socket.on('time', function (data) {
+    socket.on('time', function(data) {
         var time = data.time / 20;
         time = time * 100;
         var playerid = data.player;
@@ -410,7 +421,7 @@ io.on('connection', (socket) => {
 
 
 
-    socket.on('timeUp', function () {
+    socket.on('timeUp', function() {
         var game = games.getGame(socket.id);
         game.gameData.questionLive = false;
         var playerData = players.getPlayers(game.hostId);
@@ -418,12 +429,12 @@ io.on('connection', (socket) => {
         var gameQuestion = game.gameData.question;
         var gameid = game.gameData.gameid;
 
-        MongoClient.connect(url, function (err, db) {
+        MongoClient.connect(url, function(err, db) {
             if (err) throw err;
 
             var dbo = db.db('kahootDB');
             var query = { id: parseInt(gameid) };
-            dbo.collection("kahootGames").find(query).toArray(function (err, res) {
+            dbo.collection("kahootGames").find(query).toArray(function(err, res) {
                 if (err) throw err;
 
                 questionType = res[0].questions[gameQuestion - 1].questionType;
@@ -437,7 +448,7 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('nextQuestion', function () {
+    socket.on('nextQuestion', function() {
         var playerData = players.getPlayers(socket.id);
         //Reset players current answer to 0
         for (var i = 0; i < Object.keys(players.players).length; i++) {
@@ -452,12 +463,12 @@ io.on('connection', (socket) => {
         game.gameData.question += 1;
         var gameid = game.gameData.gameid;
 
-        MongoClient.connect(url, function (err, db) {
+        MongoClient.connect(url, function(err, db) {
             if (err) throw err;
 
             var dbo = db.db('kahootDB');
             var query = { id: parseInt(gameid) };
-            dbo.collection("kahootGames").find(query).toArray(function (err, res) {
+            dbo.collection("kahootGames").find(query).toArray(function(err, res) {
                 if (err) throw err;
 
                 if (res[0].questions.length >= game.gameData.question) {
@@ -576,51 +587,44 @@ io.on('connection', (socket) => {
 
     //When the host starts the game
     socket.on('startGame', () => {
-        var game = games.getGame(socket.id);//Get the game based on socket.id
+        var game = games.getGame(socket.id); //Get the game based on socket.id
         game.gameLive = true;
-        socket.emit('gameStarted', game.hostId);//Tell player and host that game has started
+        socket.emit('gameStarted', game.hostId); //Tell player and host that game has started
     });
 
     //Give user game names data
-    socket.on('requestDbNames', function () {
+    socket.on('requestDbNames', (data) => {
 
-        MongoClient.connect(url, function (err, db) {
+        MongoClient.connect(url, function(err, db) {
             if (err) throw err;
 
             var dbo = db.db('kahootDB');
-            dbo.collection("kahootGames").find().toArray(function (err, res) {
+            //find with teacher name ==================== Need Fix ===============
+            dbo.collection("kahootGames").find({ tName: data.tName }).toArray(function(err, res) {
                 if (err) throw err;
                 socket.emit('gameNamesData', res);
                 db.close();
             });
         });
 
-
     });
 
 
-    socket.on('newQuiz', function (data) {
-        MongoClient.connect(url, function (err, db) {
+    socket.on('newQuiz', function(data) {
+        var gameid;
+        MongoClient.connect(url, async function(err, db) {
             if (err) throw err;
             var dbo = db.db('kahootDB');
-            dbo.collection('kahootGames').find({}).toArray(function (err, result) {
-                if (err) throw err;
-                var num = Object.keys(result).length;
-                if (num == 0) {
-                    data.id = 1
-                    num = 1
-                } else {
-                    data.id = result[num - 1].id + 1;
-                }
-                var game = data;
-                dbo.collection("kahootGames").insertOne(game, function (err, res) {
-                    if (err) throw err;
-                    db.close();
-                });
-                db.close();
-                socket.emit('startGameFromCreator', num);
-            });
+            gameid = await dbo.collection("kahootGames").insertOne(data);
+            gameid = gameid.insertedId;
 
+            // dbo.collection("kahootGames").find({ _id: gameid }).toArray(function(err, res) {
+            //     if (err) throw err;
+            //     var test = res;
+            //     db.close();
+            // });
+
+            socket.emit('startGameFromCreator', gameid);
         });
 
     });

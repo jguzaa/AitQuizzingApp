@@ -1,25 +1,55 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Create | QuizzingApp</title>
-        <link rel="stylesheet" href = "../css/create.css">
-        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-    </head>
-    <body>
-        <a id = "back"href = "../dashboard">Back</a>
-        <h1 id = "title">Start a Kahoot Game</h1>
-        <h4 id = "subtitle">Choose a Game Below or <a id = "link" href = "quiz-creator/">Create your Own!</a></h4>
-        <div id = "game-list">
-            
-        </div>
 
-        <footer>
-            <p>Dev and design by @AIT<br>
+<head>
+    <title>Teacher portal | QuizzingApp</title>
+    <link rel="stylesheet" href="../css/create.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <div class="content">
+        <nav class="grey darken-3">
+            <div class="nav-wrapper container">
+                <a href="#" class="brand-logo center" id="heading">Welcome</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger show-on-large"><i class="fas fa-bars"></i></a>
+                <ul class="sidenav" id="mobile-demo">
+                    <li><a href="/create">Dashboard</a></li>
+                    <li><a href='#' onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <h1 id="title"></h1>
+        <h4 id="subtitle">Choose a Game Below <br> or <a id="link" href="quiz-creator/">Click here to create your Own!</a></h4>
+        <div id="game-list"></div>
+    </div>
+
+    <footer>
+        <p>Dev and design by @AIT<br>
             <img src="../imgs/logo.png" alt="Logo" style="height: 50px;">
-        </footer>
-        
-        <script src = "../socket.io/socket.io.js"></script>
-        <script src = "../js/create.js"></script>
-    </body>
-    
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        M.Sidenav.init(document.querySelector('.sidenav'))
+        M.FormSelect.init(document.querySelector('#status'))
+    </script>
+    <script src="../socket.io/socket.io.js"></script>
+    <script src="../js/libs/jqueryLibrary.js"></script>
+    <script src="../js/libs/deparam.js"></script>
+    <script src="../js/create.js"></script>
+    <script>
+        function logout() {
+            //debugger;
+            sessionStorage.removeItem("name");
+            window.location.href = "/";
+        }
+    </script>
+</body>
+
 </html>
