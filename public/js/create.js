@@ -12,20 +12,49 @@ socket.on('connect', function() {
 });
 
 socket.on('gameNamesData', function(data) {
+    var tbody = document.getElementById('game-list');
     for (var i = 0; i < Object.keys(data).length; i++) {
-        var div = document.getElementById('game-list');
-        var button = document.createElement('button');
 
-        button.innerHTML = data[i].name;
-        button.setAttribute('onClick', "startGame('" + data[i].id + "')");
-        button.setAttribute('id', 'gameButton');
+        var tr = document.createElement('tr');
+        var tdName = document.createElement('td');
+        var tdOptions = document.createElement('td');
+        var startButton = document.createElement('button');
+        var editButton = document.createElement('button');
+        var deleteButton = document.createElement('button');
+        var reviewButton = document.createElement('button');
 
-        div.appendChild(button);
-        div.appendChild(document.createElement('br'));
-        div.appendChild(document.createElement('br'));
+        startButton.innerHTML = 'Start quiz'
+        editButton.innerHTML = 'Edit quiz'
+        deleteButton.innerHTML = 'delete'
+        reviewButton.innerHTML = 'Review student answer'
+
+        tdName.innerHTML = data[i].name;
+
+        reviewButton.setAttribute('onClick', "reviewAns('" + data[i]._id + "')");
+
+        startButton.setAttribute('onClick', "startGame('" + data[i]._id + "')");
+        startButton.setAttribute('id', 'gameButton');
+
+        tdName.setAttribute('class', 'text-center')
+        tdOptions.setAttribute('class', 'text-center')
+
+        tdOptions.appendChild(startButton);
+        tdOptions.appendChild(editButton);
+        tdOptions.appendChild(deleteButton);
+        tdOptions.appendChild(reviewButton);
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdOptions);
+
+        tbody.appendChild(tr);
     }
+
 });
 
 function startGame(data) {
     window.location.href = "/host/" + "?id=" + data;
+}
+
+function reviewAns(data) {
+    window.location.href = "/review/" + "?id=" + data;
 }

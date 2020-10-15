@@ -14,26 +14,34 @@
 </head>
 
 <body>
-    <div id="stats">
-        <h4 id="nameText">Name: </h4>
-        <h4 id="scoreText">Score: </h4>
-        <h4 id="rankText"></h4>
-    </div>
-    <h2 id="message"></h2>
 
-    <div id='sub'>
-        <div id="subAns"></div>
-        <br>
-        <button onclick="answerSubmitted(0)">Submit answer</button>
+    <div class="content">
+        <div id="stats">
+            <h4 id="nameText">Name: </h4>
+            <h4 id="scoreText">Score: </h4>
+            <h4 id="rankText"></h4>
+        </div>
+        <h2 id="message"></h2>
+
+        <div id='sub'>
+            <div id="subAns"></div>
+            <br>
+            <button onclick="answerSubmitted(0)">Submit answer</button>
+        </div>
+
+        <div id='obj' class="ansDiv">
+            <button onclick="answerSubmitted(1)" id="answer1" class="button"></button>
+            <button onclick="answerSubmitted(2)" id="answer2" class="button"></button>
+            <br>
+            <button onclick="answerSubmitted(3)" id="answer3" class="button"></button>
+            <button onclick="answerSubmitted(4)" id="answer4" class="button"></button>
+        </div>
     </div>
 
-    <div id='obj' class="ansDiv">
-        <button onclick="answerSubmitted(1)" id="answer1" class="button"></button>
-        <button onclick="answerSubmitted(2)" id="answer2" class="button"></button>
-        <br>
-        <button onclick="answerSubmitted(3)" id="answer3" class="button"></button>
-        <button onclick="answerSubmitted(4)" id="answer4" class="button"></button>
-    </div>
+    <footer>
+        <p>Dev and design by @AIT<br>
+            <img src="../../imgs/logo.png" alt="Logo" style="height: 50px;">
+    </footer>
 
     <script src="../../socket.io/socket.io.js"></script>
     <script src="../../js/libs/jqueryLibrary.js"></script>
@@ -42,17 +50,15 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#subAns').summernote(
-                {
-                    toolbar: [],
-                    callbacks: {
-                        onChange: function (contents, $editable) {
-                            document.getElementById("subAns").innerHTML = contents;
-                        }
+        $(document).ready(function() {
+            $('#subAns').summernote({
+                toolbar: [],
+                callbacks: {
+                    onChange: function(contents, $editable) {
+                        document.getElementById("subAns").innerHTML = contents;
                     }
                 }
-            );
+            });
         });
     </script>
 </body>

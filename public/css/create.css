@@ -47,19 +47,12 @@ body {
 
 #link {
     color: white;
-}
-
-#game-list {
-    text-align: center;
+    text-decoration: underline;
 }
 
 #back {
     color: white;
     text-align: center;
-}
-
-#gameButton {
-    font-size: 80px;
 }
 
 #gameButton:hover {
@@ -82,4 +75,9 @@ footer {
     background-color: Black;
     color: white;
     line-height: 20px;
+}
+
+#quiz-table {
+    padding: 0 50px;
+    text-align: center;
 }

@@ -9,17 +9,17 @@
 </head>
 
 <body>
-    <button id="cancel" onclick="endGame()">Cancel Game</button>
-    <h2 id="title">Join this Game using the Game Pin: </h2>
-    <h1 id="gamePinText"></h1>
-    <textarea style="width: 700px; height: 500px;" readonly id='players'></textarea>
-    <br>
-    <button id='start' onclick="startGame()">Start Game</button>
-    <br>
-    <br>
+    <div class="content">
+        <button id="cancel" onclick="endGame()">Cancel Game</button>
+        <h2 id="title">Join this Game using the Game Pin: </h2>
+        <h1 id="gamePinText"></h1>
+        <textarea style="width: 700px; height: 500px;" readonly id='players'></textarea>
+        <br>
+        <button id='start' onclick="startGame()">Start Game</button>
+    </div>
     <footer>
         <p>Dev and design by @AIT<br>
-        <img src="../imgs/logo.png" alt="Logo" style="height: 50px;">
+            <img src="../imgs/logo.png" alt="Logo" style="height: 50px;">
     </footer>
     <script src="../socket.io/socket.io.js"></script>
     <script src="../js/libs/jqueryLibrary.js"></script>

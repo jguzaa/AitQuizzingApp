@@ -18,7 +18,7 @@ function updateDatabase() {
         questions.push({ "question": question, "questionType": questionType, "subAns": subAns, "objChoice": objChoice, "objCorrect": objCorrect, "time": time })
     }
 
-    var quiz = { id: 0, "name": name, "questions": questions, tName: sessionStorage.getItem("name") };
+    var quiz = { "name": name, "questions": questions, tName: sessionStorage.getItem("name") };
     socket.emit('newQuiz', quiz);
 }
 

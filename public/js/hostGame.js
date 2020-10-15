@@ -7,17 +7,17 @@ var timer;
 var time;
 
 //When host connects to server
-socket.on('connect', function () {
+socket.on('connect', function() {
 
     //Tell server that it is host connection from game view
     socket.emit('host-join-game', params);
 });
 
-socket.on('noGameFound', function () {
-    window.location.href = '../../';//Redirect user to 'join game' page
+socket.on('noGameFound', function() {
+    window.location.href = '../../'; //Redirect user to 'join game' page
 });
 
-socket.on('gameQuestions', function (data) {
+socket.on('gameQuestions', function(data) {
 
     document.getElementById('questionNum').innerHTML = 'Question : ' + data.qNum + ' / ' + data.qLength;
 
@@ -40,11 +40,11 @@ socket.on('gameQuestions', function (data) {
     updateTimer();
 });
 
-socket.on('updatePlayersAnswered', function (data) {
+socket.on('updatePlayersAnswered', function(data) {
     document.getElementById('playersAnswered').innerHTML = "Players Answered " + data.playersAnswered + " / " + data.playersInGame;
 });
 
-socket.on('questionOver', function (playerData, questionType, subAns, objCorrect) {
+socket.on('questionOver', function(playerData, questionType, subAns, objCorrect) {
     clearInterval(timer);
     var answer1 = 0;
     var answer2 = 0;
@@ -73,8 +73,7 @@ socket.on('questionOver', function (playerData, questionType, subAns, objCorrect
 
             var ansTemp = '';
             //remove space btw char
-            if(playerData[i].gameData.answer != 0)
-            {
+            if (playerData[i].gameData.answer != 0) {
                 ansTemp = (playerData[i].gameData.answer).replace(/ /g, '');
                 ansTemp = ansTemp.replace(/<p>/g, '');
                 ansTemp = ansTemp.replace(/<\/p>/g, '');
@@ -86,7 +85,7 @@ socket.on('questionOver', function (playerData, questionType, subAns, objCorrect
                 answerCorrect += 1;
             } else {
                 answerIncorrect += 1;
-            } 
+            }
             total += 1;
         }
 
@@ -188,7 +187,7 @@ function nextQuestion() {
 }
 
 function updateTimer() {
-    timer = setInterval(function () {
+    timer = setInterval(function() {
         time -= 1;
         document.getElementById('num').textContent = " " + time;
         if (time == 0) {
@@ -196,7 +195,7 @@ function updateTimer() {
         }
     }, 1000);
 }
-socket.on('GameOver', function (data) {
+socket.on('GameOver', function(data) {
     document.getElementById('nextQButton').style.display = "none";
     document.getElementById('square1').style.display = "none";
     document.getElementById('square2').style.display = "none";
@@ -214,8 +213,6 @@ socket.on('GameOver', function (data) {
     document.getElementById('question').innerHTML = "GAME OVER";
     document.getElementById('playersAnswered').innerHTML = "";
 
-
-
     document.getElementById('winner1').style.display = "block";
     document.getElementById('winner2').style.display = "block";
     document.getElementById('winner3').style.display = "block";
@@ -223,43 +220,22 @@ socket.on('GameOver', function (data) {
     document.getElementById('winner5').style.display = "block";
     document.getElementById('winnerTitle').style.display = "block";
 
-    //==============================================fix===================================================
     document.getElementById('winner1').innerHTML = "1. " + data.num1;
-    if(data.num2 != "")
+    if (data.num2 != "")
         document.getElementById('winner2').innerHTML = "2. " + data.num2;
-    if(data.num3 != "")
+    if (data.num3 != "")
         document.getElementById('winner3').innerHTML = "3. " + data.num3;
-    if(data.num4 != "")
+    if (data.num4 != "")
         document.getElementById('winner4').innerHTML = "4. " + data.num4;
-    if(data.num5 != "")
+    if (data.num5 != "")
         document.getElementById('winner5').innerHTML = "5. " + data.num5;
 });
 
 
 
-socket.on('getTime', function (player) {
+socket.on('getTime', function(player) {
     socket.emit('time', {
         player: player,
         time: time
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

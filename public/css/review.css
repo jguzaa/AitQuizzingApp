@@ -7,53 +7,6 @@ body {
 body {
     display: flex;
     flex-direction: column;
-    margin: 0px;
-}
-
-.ansDiv {
-    height: 50%;
-}
-
-button {
-    width: 50%;
-    height: 50%;
-    float: left;
-}
-
-#answer1 {
-    background-color: #4CAF50;
-}
-
-#answer2 {
-    background-color: #f94a1e;
-}
-
-#answer3 {
-    background-color: #3399ff;
-}
-
-#answer4 {
-    background-color: #ff9933;
-}
-
-#buttons {
-    text-align: center;
-}
-
-#nameText {
-    font-family: 'Raleway', sans-serif;
-    padding: 0px 10px;
-}
-
-#scoreText {
-    font-family: 'Raleway', sans-serif;
-    padding: 0px 10px;
-}
-
-#message {
-    font-family: 'Raleway', sans-serif;
-    text-align: center;
-    font-size: 35px;
 }
 
 .content {
@@ -72,4 +25,9 @@ footer {
     background-color: Black;
     color: white;
     line-height: 20px;
+}
+
+#quiz-table {
+    padding: 0 50px;
+    text-align: center;
 }
