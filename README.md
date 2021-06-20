@@ -12,6 +12,8 @@ Installation
 - run command 'npm install' to initialize project and install other required mudules
 - start server with command 'node server/server.js'
 
+== demo video https://drive.google.com/file/d/1D9TDx3R07M1n6k5m8CboDGshnELLwLKk/view?usp=sharing ==
+
 Screen Shots:
 <img src="Screenshots/join.png" height="200" width="auto" alt="Player Join"/>
 <img src="Screenshots/hostJoin.png" height="200" width="auto" alt="Host Lobby"/>
